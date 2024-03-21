@@ -4231,7 +4231,7 @@ void CEditor::RenderLayers(CUIRect LayersBox)
 		}
 	}
 
-	if(Input()->KeyPress(KEY_DOWN) && m_Dialog == DIALOG_NONE && CLineInput::GetActiveInput() == nullptr && s_Operation == OP_NONE)
+	if(Input()->KeyPress(KEY_DOWN) && m_Dialog == DIALOG_NONE && !Ui()->IsPopupOpen() && CLineInput::GetActiveInput() == nullptr && s_Operation == OP_NONE)
 	{
 		if(Input()->ShiftIsPressed())
 		{
@@ -4263,7 +4263,7 @@ void CEditor::RenderLayers(CUIRect LayersBox)
 		}
 		s_ScrollToSelectionNext = true;
 	}
-	if(Input()->KeyPress(KEY_UP) && m_Dialog == DIALOG_NONE && CLineInput::GetActiveInput() == nullptr && s_Operation == OP_NONE)
+	if(Input()->KeyPress(KEY_UP) && m_Dialog == DIALOG_NONE && !Ui()->IsPopupOpen() && CLineInput::GetActiveInput() == nullptr && s_Operation == OP_NONE)
 	{
 		if(Input()->ShiftIsPressed())
 		{
@@ -4369,8 +4369,7 @@ bool CEditor::ReplaceImage(const char *pFileName, int StorageType, bool CheckDup
 
 	std::shared_ptr<CEditorImage> pImg = m_Map.m_vpImages[m_SelectedImage];
 	Graphics()->UnloadTexture(&(pImg->m_Texture));
-	free(pImg->m_pData);
-	pImg->m_pData = nullptr;
+	pImg->Free();
 	*pImg = ImgInfo;
 	str_copy(pImg->m_aName, aBuf);
 	pImg->m_External = IsVanillaImage(pImg->m_aName);
